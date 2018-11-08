@@ -1,0 +1,106 @@
+/* 留言框的样式  */
+.contact-form input, .comment-form input {
+    border: 1px solid #aaa;
+    margin-bottom: 15px;
+    width: 100%;
+    padding: 10px 10px;
+    font-size: 16px;
+    line-height: 100%;
+    transition: 0.4s border-color linear;
+}
+
+.contact-form textarea, .comment-form textarea {
+    border: 1px solid #aaa;
+    margin-bottom: 15px;
+    width: 100%;
+    height: 92px;
+    min-height: 92px;
+    padding: 15px 15px;
+    font-size: 16px;
+    line-height: 20px !important;
+    transition: 0.4s border-color linear;
+}
+
+.contact-form input:focus, .comment-form input:focus,
+.contact-form textarea:focus, .comment-form textarea:focus {
+    border-color: #5bb8ff;
+}
+
+/**
+ * 12.0 - 留言的样式
+ */
+.comment-area {
+    padding: 0 30px 0;
+}
+
+.comment-form {
+    margin-top: 15px;
+}
+
+.comment-form .comment-btn {
+    background-color: #fff;
+    border: 1px solid #aaa;
+    font-size: 16px;
+    padding: 5px 10px;
+}
+
+.comment-list-panel {
+    margin-top: 30px;
+}
+
+.comment-list {
+    margin-top: 15px;
+}
+
+.comment-item:not(:last-child) {
+    border-bottom: 1px #ccc solid;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+}
+
+.comment-item .nickname,
+.comment-item .submit-date {
+    color: #777;
+    font-size: 14px;
+}
+
+.comment-item .nickname:after {
+    content: ' ·';
+}
+
+.comment-item .text {
+    padding-top: 5px;
+    font-size: 16px;
+}
+
+/* 点赞心图标的样式 */
+/* 最热栏留言信息的样式 */
+.collect, .hottest {
+    display: inline-block;
+    float: right;
+}
+
+/* 修改分割线的样式 */
+hr {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+/* 侧边栏内容的样式 */
+.panel-body {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.panel-body p {
+    margin: 0;
+    font-size: 12px;
+}
+
+.panel-body p span {
+    font-family: "Microsoft YaHei";
+}
+
+casual {
+    cursor: pointer
+}

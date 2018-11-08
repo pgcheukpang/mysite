@@ -1,0 +1,229 @@
+{% extends "master.html" %}
+
+{% block head_css %}
+    <!-- 引用百度地图必须的css -->
+    <link rel="stylesheet" href="http://api.map.baidu.com/library/SearchInfoWindow/1.5/src/SearchInfoWindow_min.css"/>
+    <link rel="stylesheet" href="/static/home/css/baidu_panel.css"/>
+
+    <!-- Custom styles for this template -->
+    <link href="/static/home/css/carousel.css" rel="stylesheet">
+{% endblock %}
+
+{% block headshot1 %}
+    {# omy的简介和头像 #}
+    <img class="img-circle"
+         src="/static/home/img/omy.jpg"
+         alt="Generic placeholder image" width="140" height="140">
+    <h2>Omy</h2>
+    <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies
+        vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo
+        cursus magna.</p>
+    <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+{% endblock %}
+
+{% block headshot2 %}
+    {# 我的简介和头像 #}
+    <img class="img-circle"
+         src="/static/home/img/gzp.jpg"
+         alt="Generic placeholder image" width="140" height="140">
+    <h2>Pgcp</h2>
+    <p>Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cras
+        mattis consectetur purus sit amet fermentum. Fusce dapibus, tellus ac cursus commodo, tortor mauris
+        condimentum nibh.</p>
+    <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+{% endblock %}
+
+{% block headshot3 %}
+    {# 人员待定(alien) #}
+    <img class="img-circle"
+         src="/static/home/img/alien.jpg"
+         alt="Generic placeholder image" width="140" height="140">
+    <h2>我也不知道他是谁</h2>
+    <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula
+        porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut
+        fermentum massa justo sit amet risus.
+    </p>
+    <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+{% endblock %}
+
+{% block content1 %}
+    {# 这里编辑顺计时, 按拍拖起时算, 图片待定 #}
+    <div class="row featurette">
+        <div class="col-md-7">
+            <h2 class="featurette-heading">First featurette heading.<span
+                    class="text-muted">来看看顺计时</span></h2>
+            <p class="lead"><span id="timing"></span>精确到秒，就问你怕不怕</p>
+        </div>
+        <div class="col-md-5">
+            <img class="featurette-image img-responsive center-block" data-src="holder.js/500x500/auto"
+                 alt="Generic placeholder image">
+        </div>
+    </div>
+{% endblock %}
+
+{% block content2 %}
+    {# 这里编辑婚宴倒计时, 图片可以放结婚照, 放个更多链接, 链到图片库 #}
+    <div class="row featurette">
+        <div class="col-md-7 col-md-push-5">
+            <h2 class="featurette-heading">Oh yeah, it's that good. <span
+                    class="text-muted">再看看倒计时</span>
+            </h2>
+            <p class="lead"><span id="countdown"></span></p>
+        </div>
+        <div class="col-md-5 col-md-pull-7">
+            <img class="featurette-image img-responsive center-block" data-src="holder.js/500x500/auto"
+                 alt="Generic placeholder image">
+        </div>
+    </div>
+{% endblock %}
+
+{% block map %}
+    <div class="row featurette">
+        <div class="col-md-7">
+            <h2 class="featurette-heading">晚宴地址：<span
+                    class="text-muted">天富大酒店</span></h2>
+            <p class="lead">这里一大段各种虚伪诚恳的话语</p>
+        </div>
+        <div class="col-md-5" id="parent_map">
+            <div class="col-md-5" id="hotel_map" style="height: 100%;width: 100%;"></div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block tail_scripts %}
+    <script type="text/javascript"
+            src="http://api.map.baidu.com/api?v=2.0&ak=FTlWrPCjrLgyVEZvGDFGiT7gkvO0iBv3"></script>
+    <script type="text/javascript"
+            src="http://api.map.baidu.com/library/SearchInfoWindow/1.5/src/SearchInfoWindow_min.js"></script>
+
+    {# 异步加载地图 #}
+    <script type="text/javascript">
+        //百度地图API功能
+        function loadJScript() {
+            var script = document.createElement("script");
+            script.type = "text/javascript";
+            script.src = "http://api.map.baidu.com/api?v=2.0&ak=FTlWrPCjrLgyVEZvGDFGiT7gkvO0iBv3&callback=init";
+            document.body.appendChild(script);
+        }
+
+        function init() {
+            var map = new BMap.Map("hotel_map");            // 创建Map实例
+            var point = new BMap.Point(112.68115, 22.394285); // 创建点坐标
+            map.centerAndZoom(point, 15);
+            map.enableScrollWheelZoom();                 //启用滚轮放大缩小
+
+            // 创建地址解析器实例
+            var myGeo = new BMap.Geocoder();
+            // 将地址解析结果显示在地图上,并调整地图视野
+            myGeo.getPoint("广东省江门市开平市良园路35号", function (point) {
+                if (point) {
+                    map.centerAndZoom(point, 16);
+
+                    var content = '<div style="font-size: 12px; padding: 5px 0px; overflow: hidden;">' +
+                        '<div class="panoInfoBox" id="panoInfoBox" title="天富大酒店外景" style="height: 150px;width: 323px;">' +
+                        '<img width="323" height="150" border="0" alt="天富大酒店外景" src="/static/home/img/天富.jpg">' +
+                        '</div>' +
+                        '    <p style="padding: 0px; margin: 0px; line-height: 18px; font-size: 12px; color: rgb(77, 77, 77);">\n' +
+                        '        地址：广东省江门市开平市良园路35号</p>' +
+                        '    <p style="padding: 0px; margin: 0px; line-height: 18px; font-size: 12px; color: rgb(77, 77, 77);">\n' +
+                        '        电话：(0750)2636898</p>' +
+                        '</div>';
+
+                    //创建检索信息窗口对象
+                    var searchInfoWindow = null;
+                    searchInfoWindow = new BMapLib.SearchInfoWindow(map, content, {
+                        title: "天富大酒店",      //标题
+                        width: 325,             //宽度
+                        height: 200,              //高度
+                        panel: "panel",         //检索结果面板
+                        enableAutoPan: true,     //自动平移
+                        searchTypes: [
+                            BMAPLIB_TAB_SEARCH,   //周边检索
+                            BMAPLIB_TAB_TO_HERE,  //到这里去
+                            BMAPLIB_TAB_FROM_HERE //从这里出发
+                        ]
+                    });
+                    var marker = new BMap.Marker(point);  // 创建标注
+                    marker.enableDragging(); //marker可拖拽
+                    marker.addEventListener("click", function (e) {
+                        searchInfoWindow.open(marker);
+                    });
+
+                    map.addOverlay(marker);               // 将标注添加到地图中
+                    marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
+
+                } else {
+                    alert("您选择地址没有解析到结果!");
+                }
+            }, "江门市开平市");
+        }
+
+        window.onload = loadJScript;  //异步加载地图
+    </script>
+
+
+    <script>
+        $(function () {
+            {# 地图的div随窗口自适应#}
+            var hotel_div = $("#hotel_map");
+            var w = hotel_div.width();
+            hotel_div.height(w);
+            $(window).resize(function () {
+                var w = hotel_div.width();  // w 是地图所在div的宽度
+                var w2 = $("#parent_map").width(); // w2 是地图父级div的宽度
+                if (w2 > 500) {
+                    w = 500;
+                } else {
+                    w = w2;
+                }
+                hotel_div.css({
+                    height: w,
+                    // width:w
+                });
+            });
+
+            var timing = document.getElementById('timing');
+            var start = new Date(2012, 8, 12, 1, 0, 0);
+
+            function timepast() {
+                var now = new Date();
+                var past = parseInt((now - start) / 1000);  // 总秒数
+                var p_days = parseInt(past / 86400);  // 过去天数
+                var p_hours = parseInt((past % 86400) / 3600);   // 小时数
+                var p_minute = parseInt(((past % 86400) % 3600) / 60);   // 分钟数
+                var p_second = past % 60; // 秒数
+                timing.innerText = p_days + "天" + p_hours + "小时" + p_minute + "分钟" + p_second + "秒。"
+            }
+
+            {#    定时刷新腻歪计时 #}
+            timepast();
+            setInterval(timepast, 200);
+
+
+            var future = new Date(2019, 10, 7, 18, 0, 0);
+            var countd = document.getElementById("countdown");
+
+            function countdown() {
+                var now = new Date();
+                var lefts = parseInt((future - now) / 1000);  // 总秒数
+                var left_days = parseInt(lefts / 86400);
+                var left_hours = parseInt((lefts % 86400) / 3600);
+                var left_mins = parseInt(((lefts % 86400) % 3600) / 60);
+                var left_seconds = parseInt(lefts % 60);
+                if (lefts >= 0) {
+                    countd.innerText = left_days + "天" + left_hours + "小时" + left_mins + "分钟" + left_seconds + "秒。"
+                } else if (lefts <= 0 && lefts > -7200) {
+                    countd.innerText = "进行时"
+                } else {
+                    countd.innerText = "完美谢幕"
+                }
+            }
+
+            {#定时刷新倒计时#}
+            countdown();
+            setInterval(countdown, 200)
+
+        })
+    </script>
+
+{% endblock %}

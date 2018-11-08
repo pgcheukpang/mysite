@@ -1,0 +1,46 @@
+{% load message_tags %}
+<div class="panel panel-danger">
+    <div class="panel-heading">
+        <h3 class="panel-title"><b>TOP 10</b></h3>
+    </div>
+    {% get_hot_messages limit=10 as hot_msgs %}
+    {% for msg in hot_msgs %}
+        <div class="panel-body" style="border-bottom: 1px solid #ebccd1">
+            {% if msg.reviewed_status == "2" %}
+                <!-- 内容需要复审 -->
+                {% if msg.is_error_occured == "1" %}
+                    <!-- 文本审核出现异常 -->
+                    <p style="font-size: 10px;color: indianred">
+                        因百度的文本审核服务器出现错误：{{ msg.error_msg }}，留言未能展示。请联系管理员，谢谢！
+                    </p>
+                {% else %}
+                    <!-- 文本审核无异常, 只需的内容复审 -->
+                    <p style="font-size: 10px;color: indianred">
+                        根据百度的文本审核结果，该条留言需要复审，请联系管理员，谢谢！
+                    </p>
+                {% endif %}
+            {% else %}
+                <p>{{ msg.content }}</p>
+            {% endif %}
+            <p>
+                <i class="fa fa-user-o fa-1" aria-hidden="true"></i>
+                <span>{{ msg.messager }}</span>&nbsp;&nbsp;&nbsp;
+                <fk class="hottest">
+                    <i class="fa fa-clock-o fa-1" aria-hidden="true"></i>
+                    {{ msg.created_time|date:"Y-m-d H:i" }}&nbsp;&nbsp;&nbsp;
+                    <casual id="hottest-like-{{ msg.pk }}"
+                            onclick="hottestLike({{ msg.pk }})">
+                        {% if msg.id in id_list %}
+                            <i class="fa fa-thumbs-up fa-1" id="thumbCss-{{ msg.pk }}"
+                               aria-hidden="true"></i>
+                        {% else %}
+                            <i class="fa fa-thumbs-o-up fa-1" id="thumbCss-{{ msg.pk }}"
+                               aria-hidden="true"></i>
+                        {% endif %}
+                        <num id="likeNums-{{ msg.pk }}">{{ msg.favorites.count }}</num>
+                    </casual>
+                </fk>
+            </p>
+        </div>
+    {% endfor %}
+</div>

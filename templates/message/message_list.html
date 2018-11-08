@@ -1,0 +1,319 @@
+{% extends 'master.html' %}
+{% load static %}
+{% load message_tags %}
+
+
+{% block head_css %}
+    <link rel="stylesheet" href="{% static 'message/css/custom.css' %}">
+
+    <!-- 提示框<i>标签样式 -->
+    <link rel="stylesheet" href="/static/font-awesome-4.7.0/css/font-awesome.min.css">
+    <!-- 提示框css样式 -->
+    <link rel="stylesheet" href="/static/message/css/jquery.message.css">
+    <!-- 自定义调整提示框css和<i>标签的样式 -->
+    <link rel="stylesheet" href="/static/message/css/prompt_box_style.css">
+
+    <!-- Custom styles for this template -->
+    <link href="/static/home/css/carousel.css" rel="stylesheet">
+    <style type="text/css">
+        .errorlist {
+            color: red;
+            margin-top: -5px;
+        }
+
+        .modal-content {
+            margin-top: 50%;
+        }
+    </style>
+{% endblock %}
+
+{% block carousel %}
+{% endblock %}
+
+
+{% block wholecontents %}
+    <div class="content-body">
+        <div class="container">
+            <div class="row" style="background-color: initial;height: 80px;"></div>
+            <div class="row">
+                <main class="col-md-9">
+                    <section class="comment-area" id="comment-area">
+                        <h3>走过路过不要错过{% csrf_token %}</h3>
+                        <form action="{% url 'message:addmsg' %}" method="post" class="comment-form">
+                            {% csrf_token %}
+                            <div class="row">
+                                {% include 'snippet/form.html' %}
+                                <button type="submit" class="comment-btn">发表</button>
+                            </div>    <!-- row -->
+                        </form>
+                        <div class="comment-list-panel">
+                            <h3>留言列表，共 <span id="msg_count">{{ message_sums }}</span> 条留言</h3>
+                            <!-- sub_msg_list为分页内容  -->
+                            {% for object in object_list %}
+                                <div class="media" id="message-{{ object.id }}">
+                                    <div class="media-left">
+                                        <a href="#">
+                                            <img class="media-object"
+                                                 src="{% static 'home/img/alien.jpg' %}"
+                                                 height="50" width="50" alt="用户头像"
+                                                 style="border-radius: 5px">
+                                        </a>
+                                    </div>
+                                    <div class="media-body">
+                                        <h4 class="media-heading">
+                                            {{ object.messager.username }}
+                                        </h4>
+                                        {% if object.reviewed_status == "2" %}
+                                            <!-- 内容需要复审 -->
+                                            {% if object.is_error_occured == "1" %}
+                                                <!-- 文本审核出现异常 -->
+                                                <p style="font-size: 10px;color: indianred">
+                                                    因百度的文本审核服务器出现错误：{{ object.error_msg }}，留言未能展示。请联系管理员，谢谢！
+                                                </p>
+                                            {% else %}
+                                                <!-- 文本审核无异常, 只需的内容复审 -->
+                                                <p style="font-size: 10px;color: indianred">
+                                                    该条留言需要复审，请联系管理员。
+                                                </p>
+                                            {% endif %}
+                                            <span>{{ object.created_time }}</span>
+                                            {% if object.messager_id == user.id %}
+                                                <img src="{% static 'message/img/delete.png' %}" width="13" height="13"
+                                                     id="{{ object.id }}" class="del"
+                                                     style="cursor: pointer;margin-top: -1px">
+                                            {% endif %}
+                                        {% else %}
+                                            <p>{{ object.content }}</p>
+                                            <span>{{ object.created_time }}</span>
+                                            {% if object.messager_id == user.id %}
+                                                <img src="{% static 'message/img/delete.png' %}" width="13" height="13"
+                                                     id="{{ object.id }}" class="del"
+                                                     style="cursor: pointer;margin-top: -1px">
+                                            {% endif %}
+
+                                            <span class="collect">
+                                                <span class="collect" style="cursor: pointer">
+                                            {% if object.id in id_list %}
+                                                <img id="like-{{ object.pk }}" src="{% static 'message/img/like.png' %}"
+                                                     width="20" height="20"
+                                                     alt="已点赞" onclick="favor({{ object.pk }})"><!-- 传入msgid参数 -->
+                                                <img id="nolike-{{ object.pk }}"
+                                                     src="{% static 'message/img/non_like.png' %}" width="20"
+                                                     height="20"
+                                                     alt="未点赞" onclick="nofavor({{ object.pk }})" hidden>
+                                                <!-- 传入msgid参数 -->
+                                            {% else %}
+                                                <img id="nolike-{{ object.pk }}"
+                                                     src="{% static 'message/img/non_like.png' %}" width="20"
+                                                     height="20"
+                                                     alt="未点赞" onclick="nofavor({{ object.pk }})"><!-- 传入msgid参数 -->
+                                                <img id="like-{{ object.pk }}" src="{% static 'message/img/like.png' %}"
+                                                     width="20"
+                                                     height="20"
+                                                     alt="已点赞" onclick="favor({{ object.pk }})" hidden>
+                                                <!-- 传入msgid参数 -->
+                                            {% endif %}
+                                                </span>
+                                                <span class="collect">热度: <span
+                                                        id="hot-{{ object.pk }}">{{ object.favorites.count }}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                            </span>
+
+                                        {% endif %}
+
+                                    </div>
+                                    <hr>
+                                </div>
+                            {% endfor %}
+
+                        </div>
+                    </section>
+                </main>
+
+                <main class="col-md-3">
+                    <div class="content-body">
+                        <aside>
+                            {#                             最热榜 #}
+                            {% include "message/hottest_message.html" %}
+                            {#                             暂时不显示最新留言的需求 #}
+                            {#                            {% include "message/nuwest_message.html" %}#}
+                        </aside>
+                    </div>
+                </main>
+
+            </div> <!-- row -->
+
+            <div class="row">
+                {% include 'snippet/page_snippet.html' %}
+            </div>
+        </div>  <!-- container -->
+    </div>
+
+
+{% endblock %}
+
+{% block tail_scripts %}
+    <!-- 点赞消息js -->
+    <script src="/static/message/js/jquery.message.js"></script>
+    <!-- 删除确认消息框js -->
+    <script src="/static/message/js/bootbox.min.js"></script>
+
+    {#    正文内容的点赞js #}
+    <script type="text/javascript">
+        // 点赞提示框
+        function typeMessage(type, msg) {
+            $.message({
+                type: type,
+                message: msg,
+                showClose: false,
+                duration: 2000,
+            });
+        }
+
+        // 点赞
+        function nofavor(msgid) {
+
+            $.ajax(url = "/message/addfavor/" + msgid + "/",
+                {
+                    type: "post",
+                    headers: {"X-CSRFToken": $("[name='csrfmiddlewaretoken']").val()},
+                    success: function (data) {
+                        // alert(data.msg);
+                        typeMessage("success", data.msg);
+                        $('#nolike-' + msgid).attr({"hidden": "hidden"});
+                        $('#like-' + msgid).removeAttr("hidden");
+                        // 点赞成功, 热度显示加1 (正文)
+                        var span = $("#hot-" + msgid);
+                        var str_num = span.text();
+                        span.text(parseInt(str_num) + 1);
+
+                        // 然后对侧边栏操作
+                        // 更换成实心点赞图标
+                        var thumbCss = $("#thumbCss-" + msgid);
+                        thumbCss.removeClass("fa-thumbs-o-up").addClass("fa-thumbs-up");
+                        // 点赞数 +1
+                        var num = $("#likeNums-" + msgid);
+                        num.text(parseInt(str_num) + 1);
+                    }
+                }
+            )
+        }
+
+        // 取消点赞
+        function favor(msgid) {
+
+            $.ajax(url = "/message/addfavor/" + msgid + "/",
+                {
+                    type: "post",
+                    headers: {"X-CSRFToken": $("[name='csrfmiddlewaretoken']").val()},
+                    success: function (data) {
+                        // alert(data.msg);
+                        typeMessage("info", data.msg);
+                        $('#like-' + msgid).attr({"hidden": "hidden"});
+                        $('#nolike-' + msgid).removeAttr("hidden");
+                        // 取消点赞, 热度显示减1 (正文)
+                        var span = $("#hot-" + msgid);
+                        var str_num = span.text();
+                        span.text(parseInt(str_num) - 1);
+
+                        // 然后对侧边栏操作
+                        // 更换成空心点赞图标
+                        var thumbCss = $("#thumbCss-" + msgid);
+                        thumbCss.removeClass("fa-thumbs-up").addClass("fa-thumbs-o-up");
+                        // 点赞数 -1
+                        var num = $("#likeNums-" + msgid);
+                        num.text(parseInt(str_num) - 1);
+                    }
+                }
+            )
+        }
+    </script>
+
+    {#    侧边榜单的点赞js #}
+    <script type="text/javascript">
+        // 点赞提示框
+        function typeMessage2(type, msg) {
+            $.message({
+                type: type,
+                message: msg,
+                showClose: false,
+                duration: 2000,
+            });
+        }
+
+        // 点赞, 最热栏只有点赞, 没取消点赞
+        function hottestLike(msgid) {
+            $.ajax(url = "/message/hottest_like/" + msgid + "/",
+                {
+                    type: "post",
+                    headers: {"X-CSRFToken": $("[name='csrfmiddlewaretoken']").val()},
+                    success: function (data) {
+                        if (data["code"] === 201) {
+                            typeMessage2("info", data.msg);
+                        } else if (data["code"] === 200) {
+                            // 点赞成功
+                            typeMessage2("success", data.msg);  // 提示框
+                            // 更换实心点赞图标
+                            var thumbCss = $("#thumbCss-" + msgid);
+                            thumbCss.removeClass("fa-thumbs-o-up").addClass("fa-thumbs-up");
+                            // 点赞数 +1
+                            var num = $("#likeNums-" + msgid);
+                            var str_num = num.text();
+                            num.text(parseInt(str_num) + 1);
+                            // 接着对正文的爱心图标显示做修改
+                            $('#nolike-' + msgid).attr({"hidden": "hidden"});
+                            $('#like-' + msgid).removeAttr("hidden");
+                            // 点赞成功, 热度显示加1
+                            var span = $("#hot-" + msgid);
+                            span.text(parseInt(str_num) + 1)
+                        } else {
+                            typeMessage2("warning", "点赞功能出现未知错误，请联系管理员");
+                        }
+                    }
+                }
+            )
+        }
+
+    </script>
+
+    {#    删除留言#}
+    <script>
+        $('.del').on('click', function () {
+            var id = $(this).attr('id');
+            bootbox.confirm({
+                message: "是否删除?",
+                buttons: {
+                    confirm: {
+                        label: '是',
+                        className: 'btn-delete'
+                    },
+                    cancel: {
+                        label: '否',
+                        className: 'btn-delete-not'
+                    }
+                },
+                callback: function (result) {
+                    if (result) {
+                        $.ajax({
+                            url: '/message/delmsg/',
+                            type: 'POST',
+                            data: {'id': id, csrfmiddlewaretoken: '{{ csrf_token }}'},
+                            //contentType: "application/json",
+                            success: function (result) {
+                                if (result.status) {
+                                    typeMessage('info', result.msg);
+                                    var msgid = "#message-" + id;
+                                    $(msgid).remove();  // jq删除该条留言
+                                    var nums = $("#msg_count");
+                                    var count = parseInt(nums.text()) - 1;
+                                    nums.empty().text(count)
+                                } else {
+                                    typeMessage('error', result.msg);
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+        });
+    </script>
+{% endblock %}

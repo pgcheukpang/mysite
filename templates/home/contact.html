@@ -1,0 +1,59 @@
+{% extends "master.html" %}
+
+{% block head_css %}
+    <!-- Custom styles for this template 自定义修改 -->
+    <link href="/static/home/css/carousel4contact.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/static/home/assets/css/jumbotron-narrow.css" rel="stylesheet">
+{% endblock %}
+
+{#{% block nav_li %}#}
+{#{% endblock %}#}
+
+{% block carousel %}
+    <div id="myCarousel" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner" role="listbox">
+            <div class="item active" style="background-color: initial;">
+            </div>
+        </div>
+    </div><!-- /.carousel -->
+{% endblock %}
+
+{% block wholecontents %}
+    <div class="container">
+        <div class="jumbotron" style="opacity: 0.7">
+            <h1>欢迎</h1>
+            <p class="lead">下面是一堆联系方式，有意请咨询</p>
+        </div>
+
+        <div class="row marketing">
+            <div class="col-lg-6">
+                <h4>地址</h4>
+                <p>轩汇豪庭</p>
+
+                <h4>手机</h4>
+                <p>13555682340</p>
+
+            </div>
+
+            <div class="col-lg-6">
+                <h4></h4>
+                <h4>邮箱</h4>
+                <p>449336625@qq.com</p>
+
+                <h4>微信</h4>
+                <p>shawn0912</p>
+            </div>
+        </div>
+
+        {% block footer %}
+            {{ block.super }}
+        {% endblock %}
+
+    </div> <!-- /container -->
+{% endblock %}
+
+
+{% block tail_scripts %}
+{% endblock %}

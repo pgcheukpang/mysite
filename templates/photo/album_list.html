@@ -1,0 +1,61 @@
+{% extends "master.html" %}
+
+{% block title %}相册{% endblock %}
+
+{% block head_css %}
+    <!-- 对一些标签样式额外做一些修改 -->
+    <link href="/static/photo/css/carousel4photo.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/static/photo/css/jumbotron_custom.css" rel="stylesheet">
+
+    <style>
+    /*自定义减少jumbotron类的高度*/
+    .jumbotron{
+        opacity: 0;
+        height: 0;
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+    </style>
+{% endblock %}
+
+{% block carousel %}
+    <div id="myCarousel" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner" role="listbox">
+            <div class="item active" style="background-color: initial;">
+            </div>
+        </div>
+    </div><!-- /.carousel -->
+{% endblock %}
+
+{% block wholecontents %}
+    <!-- 将页面的其余部分包装在另一个container中，以将所有内容居中。 -->
+    <div class="container">
+        <div class="jumbotron">
+{#            <h1>相册列表</h1>#}
+{#            <p class="lead">下面是一堆相册</p>#}
+        </div>
+    </div>
+    <div class="container marketing">
+        <!-- Three columns of text below the carousel -->
+        {% for row in album_list %}
+            <div class="row">
+                {% for album in row %}
+                    <div class="col-lg-4">
+                        <img class="img-circle"
+                             src="{{ album.photo_set.first.img.url }}"
+                             alt="Generic placeholder image" width="140" height="140">
+                        <h2>{{ album.name }}</h2>
+                        <p>{{ album.desc }}</p>
+                        <p>最近更新：{{ album.updated_time }}</p>
+                        <p><a class="btn btn-default" href="{% url 'photo:albums_detail' album.pk %}" role="button">View details &raquo;</a></p>
+                    </div><!-- /.col-lg-4 -->
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </div><!-- /.container -->
+{% endblock %}
+
+{% block tail_scripts %}
+{% endblock %}

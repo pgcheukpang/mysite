@@ -1,0 +1,6 @@
+/.idea/
+*.pyc
+*/migrations/0*.py
+/uploads/albums/
+/uploads/albums/*
+/uploads/*

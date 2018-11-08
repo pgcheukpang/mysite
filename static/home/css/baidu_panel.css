@@ -1,0 +1,26 @@
+/* 起点(终点)文字样式 */
+#BMapLib_stationText0 {
+    width: 30px;
+    height: 14px;
+}
+
+/* 暂时不知道有啥用 */
+#BMapLib_transBox0 {
+    height: 32px;
+}
+
+/* 面板最底那整行:包括标签,搜索框,按钮 */
+#BMapLib_transBox0 > table {
+    height: 26px;
+}
+
+/* 规定按钮的样式 */
+#BMapLib_transBox0 > table > tbody > tr > td:nth-child(3) {
+    height: 26px;
+    width: 113px;
+}
+
+/* 规定搜索框的样式 */
+#BMapLib_trans_text0 {
+    width: 181px;
+}

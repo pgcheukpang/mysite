@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no"/>
+    <title>Title</title>
+
+    <style type="text/css">
+        html {
+            height: 100%
+        }
+
+        body {
+            height: 100%;
+            margin: 0px;
+            padding: 0px
+        }
+
+        #container {
+            height: 400px;
+            width: 400px;
+        }
+    </style>
+
+</head>
+<body>
+
+<div>Hello world!!!</div>
+<div id="container"></div>
+
+</body>
+
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=FTlWrPCjrLgyVEZvGDFGiT7gkvO0iBv3"></script>
+<script type="text/javascript"
+        src="http://api.map.baidu.com/library/SearchInfoWindow/1.5/src/SearchInfoWindow_min.js"></script>
+<link rel="stylesheet" href="http://api.map.baidu.com/library/SearchInfoWindow/1.5/src/SearchInfoWindow_min.css"/>
+
+{# 异步加载地图 #}
+<script type="text/javascript">
+    //百度地图API功能
+    function loadJScript() {
+        var script = document.createElement("script");
+        script.type = "text/javascript";
+        script.src = "http://api.map.baidu.com/api?v=2.0&ak=FTlWrPCjrLgyVEZvGDFGiT7gkvO0iBv3&callback=init";
+        document.body.appendChild(script);
+    }
+
+    function init() {
+        var map = new BMap.Map("container");            // 创建Map实例
+        var point = new BMap.Point(112.68115, 22.394285); // 创建点坐标
+        map.centerAndZoom(point, 15);
+        map.enableScrollWheelZoom();                 //启用滚轮放大缩小
+
+        // 创建地址解析器实例
+        var myGeo = new BMap.Geocoder();
+        // 将地址解析结果显示在地图上,并调整地图视野
+        myGeo.getPoint("广东省江门市开平市良园路35号", function (point) {
+            if (point) {
+                map.centerAndZoom(point, 16);
+
+                var content = '<div style="font-size: 12px; padding: 5px 0px; overflow: hidden;">' +
+                    '<div class="panoInfoBox" id="panoInfoBox" title="天富大酒店外景" style="height: 150px;width: 323px;">' +
+                    '<img width="323" height="150" border="0" alt="天富大酒店外景" src="/static/home/img/天富.jpg">' +
+                    '</div>' +
+                    '    <p style="padding: 0px; margin: 0px; line-height: 18px; font-size: 12px; color: rgb(77, 77, 77);">\n' +
+                    '        地址：广东省江门市开平市良园路35号</p>' +
+                    '    <p style="padding: 0px; margin: 0px; line-height: 18px; font-size: 12px; color: rgb(77, 77, 77);">\n' +
+                    '        电话：(0750)2636898</p>' +
+                    '</div>';
+
+                //创建检索信息窗口对象
+                var searchInfoWindow = null;
+                searchInfoWindow = new BMapLib.SearchInfoWindow(map, content, {
+                    title: "天富大酒店",      //标题
+                    width: 322,             //宽度
+                    height: 200,              //高度
+                    panel: "panel",         //检索结果面板
+                    enableAutoPan: true,     //自动平移
+                    searchTypes: [
+                        //BMAPLIB_TAB_SEARCH,   //周边检索
+                        BMAPLIB_TAB_TO_HERE,  //到这里去
+                        BMAPLIB_TAB_FROM_HERE //从这里出发
+                    ]
+                });
+                var marker = new BMap.Marker(point);  // 创建标注
+                marker.enableDragging(); //marker可拖拽
+                marker.addEventListener("click", function (e) {
+                    searchInfoWindow.open(marker);
+                });
+                map.addOverlay(marker);               // 将标注添加到地图中
+                marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
+
+            } else {
+                alert("您选择地址没有解析到结果!");
+            }
+        }, "江门市开平市");
+    }
+
+    window.onload = loadJScript;  //异步加载地图
+</script>
+</html>

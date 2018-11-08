@@ -1,0 +1,61 @@
+{% extends "master.html" %}
+
+{% block head_css %}
+    <!-- Custom styles for this template 自定义修改 -->
+    <link href="/static/home/css/carousel4contact.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/static/home/assets/css/jumbotron-narrow.css" rel="stylesheet">
+{% endblock %}
+
+{#{% block nav_li %}#}
+{#{% endblock %}#}
+
+{% block carousel %}
+    <div id="myCarousel" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner" role="listbox">
+            <div class="item active" style="background-color: initial;">
+            </div>
+        </div>
+    </div><!-- /.carousel -->
+{% endblock %}
+
+{% block wholecontents %}
+    <div class="container">
+        <div class="jumbotron" style="opacity: 0.7">
+            <h1>个人详情</h1>
+            <p class="lead">下面是一堆个人隐私</p>
+        </div>
+
+        <div class="row marketing">
+            <div class="col-lg-6">
+                <h4>登录名</h4>
+                <p>{{ request.user.username }}</p>
+
+                <h4>手机</h4>
+                <p>{{ request.user.phone }}</p>
+
+                <h4>邮箱</h4>
+                <p>{% if request.user.email %}{{ request.user.email }}{% else %}无{% endif %}</p>
+            </div>
+
+            <div class="col-lg-6">
+                <h4></h4>
+                <h4>注册时间</h4>
+                <p>{{ request.user.created_time }}</p>
+
+                <h4>上次登录</h4>
+                <p>{{ request.user.last_login }}</p>
+            </div>
+        </div>
+
+        {% block footer %}
+            {{ block.super }}
+        {% endblock %}
+
+    </div> <!-- /container -->
+{% endblock %}
+
+
+{% block tail_scripts %}
+{% endblock %}

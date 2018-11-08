@@ -1,0 +1,35 @@
+{% if is_paginated %}
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+                <li><a href="?page={{ page_obj.previous_page_number }}" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+            {% else %}
+                <li><span aria-hidden="true">&laquo;</span></li>
+            {% endif %}
+
+            {% for i in page_range %}
+                {% if i == page_obj.number %}
+                    <li class="active"><a href="javascript:void(0)">{{ i }}</a></li>
+                {% else %}
+                    <li><a href="?page={{ i }}">{{ i }}</a></li>
+                {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+                <li><a href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a></li>
+            {% else %}
+                <li><span aria-hidden="true">&raquo;</span></li>
+            {% endif %}
+
+{#            <li>#}
+{#                <form>#}
+{#                    <input type="text" name="page">#}
+{#                    <input type="submit" value="go">#}
+{#                </form>#}
+{#            </li>#}
+
+        </ul>
+    </nav>
+{% endif %}

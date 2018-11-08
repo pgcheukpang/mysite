@@ -1,0 +1,75 @@
+/* 自定义点赞事件结果提示框的样式 */
+.text-success {
+  color: #3F8643 !important; }
+
+.jq-message {
+  text-align: center;
+  min-width: 150px !important; }
+
+.jq-message i {
+  font-size: 24px;
+  margin-right: 10px;
+  vertical-align: sub; }
+
+.jq-message h3 {
+  font-size: 14px;
+  line-height: 20px;
+  margin: 0 !important; }
+
+
+/* 自定义删除事件结果提示框的样式 */
+.bootbox-alert {
+  opacity: 1;
+  top: 20px;
+  display: block; }
+
+.bootbox-alert button.btn:hover {
+  background-color: #0b67cd;
+  color: white;
+  border: solid 1px #0b67cd; }
+
+.bootbox-confirm .btn-delete-not {
+  background: #fff;
+  border: 1px solid #ccc;
+  color: #666;
+  outline: none;
+  -webkit-box-shadow: none;
+  box-shadow: none; }
+
+.bootbox-confirm .btn-delete {
+  background: #0b67cd;
+  border: 1px solid #0b67cd;
+  color: white;
+  outline: none;
+  -webkit-box-shadow: none;
+  box-shadow: none; }
+
+.bootbox button.btn.btn-primary {
+  background: #0b67cd !important;
+  color: #fff; }
+
+.bootbox-body {
+  color: #333;
+  margin-top: 1rem; }
+
+
+/*******************
+自定义提示框内提示图标, 即<i>标签的样式
+*******************/
+.text-white {
+  color: #ffffff !important; }
+
+.text-danger {
+  color: #ef5350 !important; }
+
+.text-muted {
+  color: #99abb4 !important; }
+
+.text-warning {
+  color: #ffb22b !important; }
+
+.text-success {
+  color: #26dad2 !important; }
+
+.text-info {
+  color: #1976d2 !important; }

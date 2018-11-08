@@ -1,0 +1,59 @@
+{% load static %}
+{% load crispy_forms_tags %}
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>图片上传</title>
+    <!-- Bootstrap core CSS -->
+    <link href="/static/bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container" style="margin: 20px auto;">
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form | crispy }}
+        <button class="btn btn-lg btn-primary btn-block" type="submit">上传</button>
+    </form>
+</div>
+
+
+{# 罗列出已经上传的文件/图片（公共代码）#}
+{% if instance_list %}
+    <div class="container">
+        <table id="gallery" class="table table-bordered">
+            <thead>
+            <tr>
+                <th>Photo</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for photo in instance_list %}
+                <tr>
+                    <td><a href="{{ photo.img.url }}">{{ photo.img.name }} | {{ photo.name }}</a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="container">
+        {% for row in ret_list %}
+            <div class="row">
+                {% for photo in row %}
+                    <div class="col-md-4" style="margin: 20px auto;">
+                        <img src="{{ photo.img.url }}" height="100%" width="100%" alt="{{ photo.name }}">
+                    </div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+
+<script src="/static/common/js/jquery-1.12.4.min.js"></script>
+<script src="/static/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+</body>
+</html>

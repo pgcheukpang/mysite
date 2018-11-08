@@ -1,0 +1,94 @@
+{% extends 'master.html' %}
+{% load static %}
+
+{% block head_css %}
+    <!-- Custom styles for this template 自定义修改 -->
+    <link href="/static/home/css/carousel4contact.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="/static/photo/css/touchTouch.css">
+    <!-- 网页的样式框架, 包括页面照片的布局container, row, grid的样式, view more的上滑动画-->
+    <link rel="stylesheet" href="/static/photo/css/style.css">
+{% endblock %}
+
+{% block carousel %}
+{% endblock %}
+
+{% block wholecontents %}
+    <!--=====================
+              Content(定义背景图)
+    ======================-->
+    <section id="content" class="gallery">
+        <div class="container2">
+            <div class="row">
+                <div class="grid_12">
+                    <h2>Gallery</h2>
+                </div>
+                {% for photo in photos %}
+                    <div class="grid_4">
+                        <div class="box">
+                            <a href="{{ photo.img.url }}" class="gall_item" style="text-align: center;">
+                                <img src="{{ photo.img.url }}" alt="big1.jpg"><span></span>
+                            </a>
+                            <div class="box_bot">
+                                <div class="box_bot_title">照片名</div>
+                                <p>照片描述</p>
+                                <a href="#" class="btn">more</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block tail_scripts %}
+    <script src="/static/common/js/jquery-1.12.4.min.js"></script>
+    <script src="/static/common/js/jquery-migrate-1.1.1.js"></script>
+    <script src="/static/common/js/jquery.easing.1.3.js"></script>
+    <script src="/static/photo/js/script.js"></script>
+    <script src="/static/common/js/superfish.js"></script>  <!-- jQuery菜单插件superfish -->
+    <script src="/static/common/js/jquery.equalheights.js"></script>  <!-- jQuery 自动等高插件 -->
+    <script src="/static/common/js/jquery.mobilemenu.js"></script>  <!-- jQuery Mobile 表单选择菜单 -->
+
+    <script src="/static/photo/js/tmStickUp.js"></script>  <!--  -->
+    <script src="/static/common/js/jquery.ui.totop.js"></script>
+    <script src="/static/photo/js/touchTouch.jquery.js"></script>  <!-- 实现悬浮显示图片详情 -->
+    <script>
+        $(window).load(function () {
+            $().UItoTop({easingType: 'easeOutQuart'});
+            $('.gallery .gall_item').touchTouch();
+
+            // 微调初始化的高度
+            var boxes = $(".box");
+            var h = boxes.width() * 9 / 16 + 68;
+            boxes.css({
+                height: h,
+            });
+
+            {# 图片所在box的高度随窗口自适应#}
+            $(window).resize(function () {
+                var box = $(".box");
+                var w = box.width();
+                var h = w * 9 / 16 + 68;
+                box.css({
+                    height: h,
+                });
+            });
+
+            // 自定义的hover响应
+            boxes.children(".gall_item").hover(
+                function () {
+                    var box = $(this).parent(".box");
+                    var h = (box.height() - 79) / 2;
+                    var pos = "center " + h.toString() + "px";
+                    box.children(".gall_item").children("span").css({backgroundPosition: pos});
+                }, function () {
+                    var box = $(this).parent(".box");
+                    var h = box.height() / 2;
+                    box.children(".gall_item").children("span").css({backgroundPosition: "center -100px"});
+                }
+            );
+        });
+    </script>
+{% endblock %}
