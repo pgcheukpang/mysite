@@ -5,25 +5,26 @@
     <!-- Custom styles for this template 自定义修改 -->
     <link href="/static/home/css/carousel4contact.css" rel="stylesheet">
 
-    <link rel="stylesheet" href="/static/photo/css/touchTouch.css">
+    <link rel="stylesheet" href="{% static 'photo/album_detail/touchTouch.css' %}">
     <!-- 网页的样式框架, 包括页面照片的布局container, row, grid的样式, view more的上滑动画-->
-    <link rel="stylesheet" href="/static/photo/css/style.css">
+    <link rel="stylesheet" href="{% static 'photo/album_detail/style.css' %}">
+
+    <!-- 调整分页标签的位置 -->
+    <link rel="stylesheet" href="{% static 'photo/album_detail/custom_page_tag.css' %}">
 {% endblock %}
 
 {% block carousel %}
 {% endblock %}
 
 {% block wholecontents %}
-    <!--=====================
-              Content(定义背景图)
-    ======================-->
+    <!--=====================  Content(定义背景图)  ======================-->
     <section id="content" class="gallery">
         <div class="container2">
             <div class="row">
                 <div class="grid_12">
                     <h2>Gallery</h2>
                 </div>
-                {% for photo in photos %}
+                {% for photo in page_obj %}
                     <div class="grid_4">
                         <div class="box">
                             <a href="{{ photo.img.url }}" class="gall_item" style="text-align: center;">
@@ -37,6 +38,9 @@
                         </div>
                     </div>
                 {% endfor %}
+            </div>
+            <div class="row">
+                {% include 'snippet/page_snippet.html' %}
             </div>
         </div>
     </section>

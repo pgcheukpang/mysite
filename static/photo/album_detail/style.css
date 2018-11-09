@@ -1,12 +1,20 @@
 @import '../css/grid.css';
 @import '../../font-awesome-4.7.0/css/font-awesome.css';
-@import url(http://fonts.useso.com/css?family=Open+Sans:400);
-@import url(http://fonts.useso.com/css?family=Open+Sans:700);
-@import url(http://fonts.useso.com/css?family=Open+Sans:300);
-@import url(http://fonts.useso.com/css?family=Open+Sans:300italic);
-@import url(http://fonts.useso.com/css?family=Pathway+Gothic+One);
-@import url(http://fonts.useso.com/css?family=Dosis:400);
-@import url(http://fonts.useso.com/css?family=Dosis:300);
+/*@import url(http://fonts.googleapis.com/css?family=Open+Sans:400);*/
+/*@import url(http://fonts.googleapis.com/css?family=Open+Sans:700);*/
+/*@import url(http://fonts.googleapis.com/css?family=Open+Sans:300);*/
+/*@import url(http://fonts.googleapis.com/css?family=Open+Sans:300italic);*/
+/*@import url(http://fonts.googleapis.com/css?family=Pathway+Gothic+One);*/
+/*@import url(http://fonts.googleapis.com/css?family=Dosis:400);*/
+/*@import url(http://fonts.googleapis.com/css?family=Dosis:300);*/
+
+@import 'family=Open+Sans400.css';
+@import 'family=Open+Sans700.css';
+@import 'family=Open+Sans300.css';
+@import 'family=Open+Sans300italic.css';
+@import 'family=Pathway+Gothic+One.css';
+@import 'family=Dosis300.css';
+@import 'family=Dosis400.css';
 
 .navigation {
     z-index: 999;
@@ -478,7 +486,7 @@ header {
     display: block;
     position: relative;
     z-index: 999;
-    background: url(/uploads/albums/1/1eae1537263277.jpg) center 0 no-repeat;
+    background: url(/uploads/albums/1/8e701541647133444.jpg) center 0 no-repeat;
 }
 
 header .rel {

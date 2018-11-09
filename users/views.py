@@ -7,6 +7,7 @@ import uuid
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import SuccessURLAllowedHostsMixin, PasswordChangeView, PasswordResetView
 from django.contrib.sites.shortcuts import get_current_site
+from django.db.models.fields.files import ImageFieldFile
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, resolve_url
 from django.shortcuts import redirect, reverse
@@ -19,8 +20,7 @@ from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.debug import sensitive_post_parameters
 from django.views.generic import FormView
 
-from mysite import settings
-from mysite.settings import MEDIA_ROOT
+from django.conf import settings
 from users.forms import RegisterModelForm, LoginForm, PasswordResetCustomEmailForm
 
 
@@ -206,7 +206,7 @@ class UserHeadshotView(View):
         filename = "{}.{}".format(uuid.uuid4().hex[:4] + str(int(time.time() * 1000)),
                                   photo_suffix)
         # 保存文件夹的绝对路径
-        folder = os.path.join(MEDIA_ROOT, "avatar/%d/" % request.user.id)
+        folder = os.path.join(settings.MEDIA_ROOT, "avatar/%d/" % request.user.id)
         if not os.path.exists(folder):
             os.makedirs(folder)
         # 新文件的绝对路径
@@ -216,9 +216,17 @@ class UserHeadshotView(View):
             img.write(convert_img_raw_data)
 
         # 删除原头像文件
+        user = request.user
+        old_name = user.headshot.name  # 绝对路径减去( MEDIA_ROOT + \ )
+        if old_name == "alien.jpg":
+            # 默认的头像不要删除
+            pass
+        else:
+            # old_abs_path = settings.MEDIA_ROOT + "/" + old_name
+            old_abs_path = request.user.headshot.path  # 绝对路径
+            os.remove(old_abs_path)
 
         # 更新头像数据
-        user = request.user
         user.headshot = "avatar/%d/" % request.user.id + filename
         user.save(update_fields=["headshot", ])
         return JsonResponse({"msg": "success"})

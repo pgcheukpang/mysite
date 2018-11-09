@@ -1,5 +1,5 @@
 {% if is_paginated %}
-    <nav aria-label="Page navigation">
+    <nav aria-label="Page navigation" class="mypage">
         <ul class="pagination">
             {% if page_obj.has_previous %}
                 <li><a href="?page={{ page_obj.previous_page_number }}" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>

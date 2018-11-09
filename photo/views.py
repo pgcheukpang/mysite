@@ -2,9 +2,11 @@ from django.shortcuts import render
 from django.views.generic import View, ListView
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+from django.core import paginator
 
 from photo.forms import PhotoForm
 from photo import models
+from common import utils
 
 
 # 相簿列表视图
@@ -72,5 +74,22 @@ class PhotoAlbumDetailView(View):
     def get(self, request, albums_id):
         album = models.Album.objects.get(id=albums_id)
         photos = album.photo_set.all()
-        context = {"photos": photos}
+        photo_sum = photos.count()
+
+        # 分页
+        page = int(request.GET.get('page', 1))
+        per_page = int(request.GET.get('per_page', 9))
+        paginater = paginator.Paginator(object_list=photos, per_page=per_page)
+        try:
+            page_obj = paginater.page(page)
+        except paginator.PageNotAnInteger:
+            page_obj = paginater.page(1)  # 首次进入给第一页
+            page = 1
+        except paginator.EmptyPage:
+            page_obj = paginater.page(paginater.num_pages)  # 空页给最后一页
+            page = paginater.num_pages
+        start, end = utils.custom_paginator(current_page=int(page), total_pages=paginater.num_pages, max_page=10)
+
+        context = {"page_obj": page_obj, "page": page, "page_range": range(int(start), int(end) + 1),
+                   "per_page": per_page, "total": paginater.count, "is_paginated": page_obj.has_other_pages()}
         return render(request, "photo/album_detail.html", context=context)

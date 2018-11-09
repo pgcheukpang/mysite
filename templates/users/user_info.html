@@ -48,12 +48,15 @@
                 <p>{{ request.user.last_login }}</p>
             </div>
         </div>
+    </div> <!-- /container -->
 
+    <!-- Content -->
+    <div class="container">
         {% block footer %}
             {{ block.super }}
         {% endblock %}
+    </div> <!-- Content End -->
 
-    </div> <!-- /container -->
 {% endblock %}
 
 

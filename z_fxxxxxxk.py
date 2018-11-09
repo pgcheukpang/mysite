@@ -56,7 +56,6 @@ class TestDict(unittest.TestCase):
         with self.assertRaises(AttributeError):
             value = d.empty
 
-
 if __name__ == '__main__':
-    # unittest.main()
-    print(range(10), type(range(10)))
+    unittest.main()
+    pass
